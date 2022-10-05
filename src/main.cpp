@@ -1,44 +1,34 @@
-#include "raylib.h"
+#include <raylib.h>
 
-int x = GetScreenWidth() / 2;
-int y = GetScreenHeight() / 2;
-
-void update()
+int main() 
 {
-    if(IsKeyDown(KEY_RIGHT))
-    {
-        x++;
-    } 
-    if (IsKeyDown(KEY_LEFT))
-    {
-        x--;
-    }
-    if (IsKeyDown(KEY_UP))
-    {
-        y--;
-    }
-    if (IsKeyDown(KEY_DOWN))
-    {
-        y++;
-    }
-}
+    InitWindow(1000, 700, "Sandbox");
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
+    SetExitKey(KEY_ESCAPE);
 
-void draw()
-{
-    DrawRectangle(x,y, 50, 50, { 245, 245, 245, 255 });
-}
+    ChangeDirectory("/home/archspect/Code/Raylib/Playground/");
 
-int main(void)
-{
-    InitWindow(1000, 700, "raylib");
-    while (!WindowShouldClose())
+    Camera camera = {0};
+    camera.position = (Vector3){10.0f, 10.0f, 10.0f}; 
+    camera.target = (Vector3){0.0f, 0.0f, 0.0f};      
+    camera.up =
+        (Vector3){0.0f, 1.0f, 0.0f}; 
+    camera.fovy = 45.0f;             
+    camera.projection = CAMERA_PERSPECTIVE;
+    Vector3 position = {0.0f, 0.0f, 0.0f}; 
+    Model model = LoadModel("model.gltf");
+    Texture2D texture = LoadTexture("steve.png");
+    SetMaterialTexture(&model.materials[0], MATERIAL_MAP_DIFFUSE, texture);
+
+    while (!WindowShouldClose()) 
     {
-        update();
-        BeginDrawing();
-            ClearBackground(BLACK);
-            draw();
-        EndDrawing();
+      UpdateCamera(&camera);
+      BeginDrawing();
+        ClearBackground({0, 0, 0, 255});
+        BeginMode3D(camera);
+        DrawModelEx(model, position, (Vector3){1.0f, 0.0f, 0.0f}, -90.0f,
+                      (Vector3){1.0f, 1.0f, 1.0f}, WHITE);
+        EndMode3D();
+      EndDrawing();
     }
-    CloseWindow();
-    return 0;
 }
