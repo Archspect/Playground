@@ -6,6 +6,7 @@ int main()
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     SetExitKey(KEY_ESCAPE);
 
+    // TODO: stop using absolute paths
     ChangeDirectory("/home/archspect/Code/Raylib/Playground/");
 
     Camera camera = {0};
